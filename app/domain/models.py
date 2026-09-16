@@ -5,29 +5,27 @@ import uuid
 from datetime import datetime, timezone
 
 
-class Severity(str,Enum):
-    CRITICAL="critical"
-    HIGH="high"
-    MEDIUM="medium"
-    LOW="low"
-    INFO="info"
+class Severity(str, Enum):
+    CRITICAL = "critical"
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+    INFO = "info"
 
-@property
-def weight(self) -> int:
+    @property
+    def weight(self) -> int:
+        weights = {
+            Severity.CRITICAL: 25,
+            Severity.HIGH: 12,
+            Severity.MEDIUM: 5,
+            Severity.LOW: 2,
+            Severity.INFO: 0,
+        }
+        return weights.get(self, 0)
 
-    weights = {
-      Severity.CRITICAL:25,
-      Severity.HIGH:12,
-      Severity.MEDIUM:5,
-      Severity.LOW:2,
-      Severity.INFO:0
-    }
-    return weights.get(self,0)
-
-@property
-def rank(self) -> int:
-
-    return list(Severity).index(self)
+    @property
+    def rank(self) -> int:
+        return list(Severity).index(self)
 
 
 # Define DataClass for Code Submission
