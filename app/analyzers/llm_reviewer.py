@@ -29,7 +29,8 @@ _SEVERITY_MAP = {s.value: s for s in Severity}
 class LLMReviewAnalyzer(Analyzer):
     name = 'llm-semantic'
 
-    def __init__(self, model: str = "llama-3.3-70b-versatile", api_key: str | None = None):
+    
+    def __init__(self, model: str = "openai/gpt-oss-20b", api_key: str | None = None):
         self.model = model
         self.api_key = api_key or os.environ.get("GROQ_API_KEY")
 
