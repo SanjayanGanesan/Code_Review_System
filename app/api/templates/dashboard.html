@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · AI Code Review{% endblock %}
+{% block content %}
+
+<section class="panel">
+  <h1>Submit code for review</h1>
+  <form action="/review" method="post" class="review-form">
+    <div class="row">
+      <input type="text" name="filename" placeholder="filename.py" value="submission.py">
+      <select name="language">
+        <option value="python" selected>Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="java">Java</option>
+        <option value="csharp">C#</option>
+        <option value="css">CSS</option>
+        <option value="html">HTML</option>
+        <option value="sql">SQL</option>
+      </select>
+      <label class="checkbox">
+        <input type="checkbox" name="use_llm" value="true">
+        Include LLM semantic review
+      </label>
+    </div>
+    <textarea name="code" rows="16" placeholder="Paste code here..." required></textarea>
+    <button type="submit">Run Review</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Recent reviews</h2>
+  {% if reviews %}
+  <table class="review-table">
+    <thead>
+      <tr><th>File</th><th>Score</th><th>Critical</th><th>High</th><th>Total</th><th>When</th></tr>
+    </thead>
+    <tbody>
+      {% for r in reviews %}
+      <tr onclick="window.location='/reviews/{{ r.id }}'">
+        <td>{{ r.submission.filename }}</td>
+        <td><span class="score score-{{ 'good' if r.score >= 80 else ('warn' if r.score >= 50 else 'bad') }}">{{ r.score }}</span></td>
+        <td>{{ r.summary.critical }}</td>
+        <td>{{ r.summary.high }}</td>
+        <td>{{ r.findings|length }}</td>
+        <td class="muted">{{ r.created_at.strftime('%b %d, %H:%M') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">No reviews yet — submit some code above to get started.</p>
+  {% endif %}
+</section>
+
+{% endblock %}

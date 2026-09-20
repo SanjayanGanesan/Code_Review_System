@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Not found{% endblock %}
+{% block content %}
+<section class="panel">
+  <h1>Review not found</h1>
+  <p class="muted">No review with id "{{ review_id }}".</p>
+  <a class="back-link" href="/">&larr; Back to dashboard</a>
+</section>
+{% endblock %}

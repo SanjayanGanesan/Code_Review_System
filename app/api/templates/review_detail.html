@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ review.submission.filename }} · Review{% endblock %}
+{% block content %}
+
+<a class="back-link" href="/">&larr; Back to dashboard</a>
+
+<section class="panel review-header">
+  <div>
+    <h1>{{ review.submission.filename }}</h1>
+    <p class="muted">{{ review.submission.language }} · reviewed {{ review.created_at.strftime('%b %d, %Y %H:%M UTC') }}</p>
+  </div>
+  <div class="score-badge score-{{ 'good' if review.score >= 80 else ('warn' if review.score >= 50 else 'bad') }}">
+    {{ review.score }}<span>/100</span>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Findings ({{ review.findings|length }})</h2>
+  {% if review.findings %}
+  <div class="findings-list">
+    {% for f in review.findings %}
+    <div class="finding sev-{{ f.severity.value }}">
+      <div class="finding-meta">
+        <span class="badge badge-{{ f.severity.value }}">{{ f.severity.value }}</span>
+        <span class="finding-source">{{ f.analyzer }} · {{ f.category }}</span>
+        {% if f.line %}<span class="finding-line">line {{ f.line }}</span>{% endif %}
+      </div>
+      <p class="finding-message">{{ f.message }}</p>
+      {% if f.suggestion %}<p class="finding-suggestion">💡 {{ f.suggestion }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="muted">No issues found. Clean code.</p>
+  {% endif %}
+</section>
+
+<section class="panel">
+  <h2>Source</h2>
+  <pre class="code-block"><code>{{ review.submission.code }}</code></pre>
+</section>
+
+{% endblock %}
